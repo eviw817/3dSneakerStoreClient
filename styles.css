@@ -1,0 +1,164 @@
+body {
+    background-color: #FFFCF2;
+    color: #252422;
+    font-family: 'Satoshi', sans-serif;
+    margin: 0;
+}
+
+/* nav css */
+
+nav{
+    background-color: #403D39;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input{
+    all: unset;
+    width: 100%;
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    width: 30%;
+    height: auto;
+    padding: 20px;
+}
+
+.searchbar{
+    width: 100%;
+    height: 20px;
+    background-color: #FFFCF2;
+    padding: 15px 20px;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings{
+    display: flex;
+    align-items: center;
+    width: 30%;
+    justify-content: space-around;
+}
+
+.search{
+    font-size: 30px;
+    border-radius: 50%;
+    color: #403D39;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.account, .cart{
+    font-size: 40px;
+    color: #FFFCF2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main{
+    display: flex;
+    margin: 20px;
+}
+
+/* preview css */
+.preview_custom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.preview_custom > a{
+    text-decoration: none;
+    color: #FFFCF2;
+}
+
+.customize_btn{
+    background-color: #EB5E28;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: bold;
+    margin: 10px;
+    width: 90%;
+}
+
+/* information css */
+
+.preferences{
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: left;
+    margin-left: 120px;
+}
+
+.style{
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    margin: 10px;
+}
+
+.color-options{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+#options{
+    margin: 2px;
+}
+
+.size-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 10px;
+}
+
+.size-options select {
+    width: 100px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #403D39;
+    background-color: #FFFCF2;
+    color: #252422;
+}
+
+.place_order_btn > a{
+    text-decoration: none;
+    color: #403D39;
+
+    background-color: #CCC5B9;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.border{
+    background-color: #CCC5B9;
+    border-radius: 100%;
+    padding-left: 4px;
+    padding-right: 3px;
+    padding-bottom: 2px;
+    /* if a color gets chosen, change color to orange */
+}

@@ -3,9 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <title>3d Sneaker Store</title>
+    <style>
+        .material-symbols-rounded {
+            font-family: 'Material Symbols Rounded';
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 48;
+        }
+    </style>
 </head>
 <body>
-    
+
+    <nav>
+        <div class="logo">
+            <img src="images/logo.png" alt="logo">
+        </div>
+        <div class="searchbar">
+            <input type="text" placeholder="What are you looking for?">
+            <span class="material-symbols-rounded search">search</span>
+        </div>
+        <div class="settings">
+            <span class="material-symbols-rounded account">account_circle</span>
+            <span class="material-symbols-rounded cart">shopping_cart</span>
+        </div>
+
+        </div>
+    </nav>
+
+    <main>
+        <div class="preview_custom">
+            <canvas id="sneakerCanvas" width="900" height="472"></canvas>
+
+            <a href="#" class="customize_btn">
+                <h3>Customize your perfect shoe!</h3>
+            </a>
+        </div>
+
+        <div class="preferences">
+            <div class="title">
+                <h1>Fancy shoe name</h1>
+                <h2>Cute price tag</h2>
+            </div>
+
+            <div class="style">
+                <div class="color">
+                    <h3>Color:</h3>
+                    <div class="color-options">
+                        <div id="colors"></div>
+                    </div>
+                </div>
+
+                <div class="size">
+                    <h3>Size:</h3>
+                    <div class="size-options">
+                        <select id="sizes">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="place_order_btn">
+                <a href="#">Place Order</a>
+            </div>
+        </div>
+
+    </main>
 </body>
+<script src="main.js" type="module"></script>
+<script>
+    const colors = ["Black", "White", "Red", "Blue", "Green", "Yellow"];
+    colors.forEach(color => {
+        document.getElementById('colors').innerHTML += `
+            <div>
+            <span class="border" style="color: ${color};">●</span>
+            <span>${color}</span>
+            </div>
+        `;
+    });
+
+    for (let size = 35.5; size <= 50; size += 0.5) {
+        document.getElementById('sizes').innerHTML += `<option value="${size}">${size}</option>`;
+    }
+</script>
 </html>
