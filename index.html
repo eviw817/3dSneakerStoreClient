@@ -5,65 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>3d Sneaker Store</title>
-    <style>
-        .material-symbols-rounded {
-            font-family: 'Material Symbols Rounded';
-            font-variation-settings:
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 48;
-        }
-    </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">
-            <img src="images/logo.png" alt="logo">
+            <img src="/images/SWEAR_Logo.png" alt="logo">
         </div>
-        <div class="searchbar">
-            <input type="text" placeholder="What are you looking for?">
-            <span class="material-symbols-rounded search">search</span>
+        <div class="menu">
+            <p>Shop</p>
+            <p>About</p>
+            <p>Vault</p>
+            <p>Journal</p>
+            <p>Sustainability</p>
         </div>
         <div class="settings">
+            <span class="material-symbols-rounded search">search</span>
             <span class="material-symbols-rounded account">account_circle</span>
             <span class="material-symbols-rounded cart">shopping_cart</span>
         </div>
 
-        </div>
     </nav>
 
     <main>
-        <div class="preview_custom">
-            <canvas id="sneakerCanvas" width="900" height="472"></canvas>
 
-            <a href="#" class="customize_btn">
-                <h3>Customize your perfect shoe!</h3>
-            </a>
+        <div class="title">
+            <h1>Fancy shoe name</h1>
+            <h2>Cute price tag</h2>
         </div>
 
-        <div class="preferences">
-            <div class="title">
-                <h1>Fancy shoe name</h1>
-                <h2>Cute price tag</h2>
+        <div class="canvas">
+            <canvas id="sneakerCanvas" width="900" height="472"></canvas>
+        </div>
+
+        <div class="preferences">            
+            <div class="size">
+                <h3>Size:</h3>
+                <div class="size-options">
+                    <select id="sizes"></select>
+                </div>
             </div>
 
-            <div class="style">
-                <div class="color">
-                    <h3>Color:</h3>
-                    <div class="color-options">
-                        <div id="colors"></div>
-                    </div>
-                </div>
-
-                <div class="size">
-                    <h3>Size:</h3>
-                    <div class="size-options">
-                        <select id="sizes"></select>
-                    </div>
+            <div class="material">
+                <h3>Material:</h3>
+                <div id="material-options"></div>
+            </div>
+            
+            <div class="color">
+                <h3>Color:</h3>
+                <div class="color-options">
+                    <a href="#" class="color-circle" data-color="Black" style="background-color: Black"></a>
+                    <a href="#" class="color-circle" data-color="White" style="background-color: White"></a>
+                    <a href="#" class="color-circle" data-color="Red" style="background-color: Red"></a>
+                    <a href="#" class="color-circle" data-color="Blue" style="background-color: Blue"></a>
+                    <a href="#" class="color-circle" data-color="Green" style="background-color: Green"></a>
+                    <a href="#" class="color-circle" data-color="Yellow" style="background-color: Yellow"></a>
+                    <a href="#" class="color-circle" data-color="Orange" style="background-color: Orange"></a>
+                    <a href="#" class="color-circle" data-color="Purple" style="background-color: Purple"></a>
+                    <a href="#" class="color-circle" data-color="Brown" style="background-color: Brown"></a>
                 </div>
             </div>
 
@@ -72,22 +76,81 @@
             </div>
         </div>
 
+        <!-- under here make "Filled cart" and hide other pages -->
+
+        <div class="order-confirmation" style="display: none;">
+            <h1>Thanks for your order!</h1>
+            <a href="#" class="home-btn">Go back to home</a>
+        </div>
+
     </main>
 </body>
 <script src="main.js" type="module"></script>
 <script>
-    const colors = ["Black", "White", "Red", "Blue", "Green", "Yellow"];
-    colors.forEach(color => {
-        document.getElementById('colors').innerHTML += `
-            <div>
-            <span class="border" style="color: ${color};">●</span>
-            <span>${color}</span>
-            </div>
+    // Sizes dropdown (35.5 - 50)
+    for (let size = 35.5; size <= 50; size += 0.5) {
+        document.getElementById('sizes').innerHTML += `<option value="${size}">${size} EU</option>`;
+    }
+
+    const materials = ["Leather", "Fabric", "Rubber", "Metallic"];
+    materials.forEach(material => {
+        document.getElementById('material-options').innerHTML += `
+            <button class="material-button">${material}</button>
         `;
     });
 
-    for (let size = 35.5; size <= 50; size += 0.5) {
-        document.getElementById('sizes').innerHTML += `<option value="${size}">${size}</option>`;
-    }
+    document.querySelectorAll('.material-button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.material-button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            });
+            this.classList.add('active');
+            this.style.backgroundColor = '#69ff47';
+            this.style.color = '#0d0d0d';
+        });
+    });
+
+    document.querySelectorAll('.color-circle').forEach(circle => {
+        circle.addEventListener('click', function(event) {
+            document.querySelectorAll('.color-label').forEach(label => label.remove());
+            document.querySelectorAll('.color-circle').forEach(c => {
+                c.style.border = '2px solid #0d0d0d';
+            });
+            this.style.border = '2px solid #3ff815';
+            let colorName = this.style.backgroundColor;
+            colorName = colorName.charAt(0).toUpperCase() + colorName.slice(1); // Capitalize first letter
+            let colorLabel = document.querySelector('.color-label');
+            if (!colorLabel) {
+                colorLabel = document.createElement('div');
+                colorLabel.classList.add('color-label');
+                colorLabel.style.textAlign = 'center';
+                colorLabel.style.position = 'absolute';
+                colorLabel.style.zIndex = '10';
+                colorLabel.style.fontWeight = 'bold';
+                colorLabel.style.backgroundColor = '#3ff815';
+                colorLabel.style.padding = '5px';
+                colorLabel.style.borderRadius = '5px';
+                colorLabel.style.marginTop = '60px';
+            }
+            colorLabel.textContent = colorName;
+            document.querySelector('.color').appendChild(colorLabel);
+            colorLabel.textContent = colorName;
+            event.stopPropagation();
+        });
+    });
+
+    document.querySelector('.place_order_btn').addEventListener('click', function(event) {
+        console.log('Place Order button clicked');
+        document.querySelector('.title').style.display = 'none';
+        document.querySelector('.canvas').style.display = 'none';
+        document.querySelector('.preferences').style.display = 'none';
+        document.querySelector('.order-confirmation').style.display = 'block';
+    });
+
+    document.querySelector('.home-btn').addEventListener('click', function(event) {
+        location.reload();
+    });
 </script>
 </html>
