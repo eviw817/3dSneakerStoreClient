@@ -2,7 +2,8 @@ import * as THREE from 'three'; // importeert three.js
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'; // importeert orbit controls
 import gsap from 'gsap'; // importeert gsap, aparte library gespecialiseerd in animaties
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'; // importeert gltf loader
-import * as dat from 'dat.gui';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 export function createShoeScene(el) {
     const canvasHeight = 440;
@@ -81,12 +82,22 @@ export function createShoeScene(el) {
     
         scene.add(gltf.scene);
     
-        //gsap spin the shoe in a consistent loop
-        gsap.to(gltf.scene.rotation, {
+        // gsap spin the shoe in a consistent loop
+        const spinAnimation = gsap.to(gltf.scene.rotation, {
             y: Math.PI * 2,
             duration: 5,
             repeat: -1,
             ease: 'none',
+        });
+
+        // Stop spinning when stopButton is clicked
+        document.getElementById('stopButton').addEventListener('click', () => {
+            spinAnimation.pause();
+        });
+
+        // Start spinning when startButton is clicked
+        document.getElementById('startButton').addEventListener('click', () => {
+            spinAnimation.resume();
         });
     });
 
@@ -139,8 +150,47 @@ export function createShoeScene(el) {
         });
     });
     
+    const loader = new FontLoader();
 
-    // add canvas with name for the shoe
+    loader.load('fonts/RobotoMedium_Regular.json', function (font) {
+        let textMesh = null;
+
+        document.getElementById('shoeName').addEventListener('input', () => {
+            const shoeNameInput = document.getElementById('shoeName').value;
+
+            if (textMesh) {
+                scene.remove(textMesh);
+            }
+
+            if (shoeNameInput !== '') {
+                const textGeometry = new TextGeometry(shoeNameInput, {
+                    font: font,
+                    size: 0.2,
+                    depth: 0.02,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.01,
+                    bevelSize: 0.01,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                });
+
+                const textMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+                textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+                // Position the text on the "inside" part of the shoe
+                textMesh.position.set(0.1, 0.1, 0); // Adjust the position as needed
+                textMesh.rotation.x = Math.PI / 2;
+                textMesh.rotation.z = Math.PI / 2;
+                // Mirror the text so it is readable
+                textMesh.scale.set(-1, 1, 1);
+
+                scene.add(textMesh);
+            }
+        });
+    });
+
+    //make name spin and stop
 
     camera.position.z = 5;
     
