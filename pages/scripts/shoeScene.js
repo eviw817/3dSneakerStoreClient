@@ -17,6 +17,9 @@ export function createShoeScene(el) {
     // Add canvas to the document element.
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, canvas : el });
     renderer.setSize( canvasWidth, canvasHeight );
+
+    // Set canvas background color
+    renderer.setClearColor(0xf0ffed, 1); // Set the background color to black
     
     // orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -39,26 +42,6 @@ export function createShoeScene(el) {
     pointLight.position.set( 0, 2, 0 ); // point light positie
     pointLight.castShadow = true; // point light shadow
     scene.add( pointLight ); // point light toevoegen aan scene
-    
-    // environment map
-    const cubeTextureLoader = new THREE.CubeTextureLoader();
-    const environmentMapTexture = cubeTextureLoader.load([
-      '/background/px.png',
-      '/background/nx.png',
-      '/background/py.png',
-      '/background/ny.png',
-      '/background/pz.png',
-      '/background/nz.png',
-    ]);
-    scene.background = environmentMapTexture;
-    
-    // add a platform (BoxGeometry( 5, 0.1, 5 ) where the shoe will be placed on
-    const platformGeometry = new THREE.BoxGeometry(5, 0.1, 5);
-    const platformMaterial = new THREE.MeshStandardMaterial({ color: 0x3df913 });
-    const platform = new THREE.Mesh( platformGeometry, platformMaterial );
-    platform.position.y = -0.3; // position the platform below the shoe
-    platform.receiveShadow = true; // platform shadow
-    scene.add( platform );
     
     // load texture
     const textureLoader = new THREE.TextureLoader();
@@ -103,7 +86,7 @@ export function createShoeScene(el) {
     ];
     let currentIntersect = null;
 
-    // Handle Mouse Clicks
+    // Handle mouse click events
     window.addEventListener('click', (event) => {
         const { left, top, width, height } = renderer.domElement.getBoundingClientRect();
         mouse.x = ((event.clientX - left) / width) * 2 - 1;
@@ -117,7 +100,7 @@ export function createShoeScene(el) {
             if (editableObjects.includes(firstIntersect.object.name)) {
                 currentIntersect = firstIntersect;
                 const material = currentIntersect.object.material;
-                if (material && material.color) {
+                if (material && material.color && material.color.getHex() === 0xffffff) {
                     material.color.set(0x808080); 
                 }
             }
@@ -138,8 +121,20 @@ export function createShoeScene(el) {
         });
     });
 
-    // materials
-    
+    // Change Material on Button Click
+    document.querySelectorAll('.material-button').forEach((button) => {
+        button.addEventListener('click', (event) => {
+            const materialName = event.target.getAttribute('data-material');
+            const materialTexture = textureLoader.load(`/materials/${materialName}.png`);
+            const newMaterial = new THREE.MeshMatcapMaterial({ matcap: materialTexture });
+            
+            if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
+                currentIntersect.object.material = newMaterial;
+            }
+        });
+    });
+
+
     // Add text to the scene
     const loader = new FontLoader();
 
@@ -192,7 +187,7 @@ export function createShoeScene(el) {
     // gsap spin the group in a consistent loop
     const spinAnimation = gsap.to(spinGroup.rotation, {
         y: Math.PI * 2,
-        duration: 5,
+        duration: 20,
         repeat: -1,
         ease: 'none',
     });
@@ -206,8 +201,6 @@ export function createShoeScene(el) {
     document.getElementById('startButton').addEventListener('click', () => {
         spinAnimation.resume();
     });
-    
-    //make name spin and stop
 
     camera.position.z = 5;
     

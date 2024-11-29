@@ -62,7 +62,12 @@
 
             <div class="material">
                 <h3>Material:</h3>
-                <div id="material-options"></div>
+                <div id="material-options">
+                    <a data-material="Leather" class="material-button" >Leather</a>
+                    <a data-material="Fabric" class="material-button" >Fabric</a>
+                    <a data-material="Rubber" class="material-button" >Rubber</a>
+                    <a data-material="Metallic" class="material-button" >Metallic</a>
+                </div>
             </div>
             
             <div class="color">
@@ -106,13 +111,6 @@
         document.getElementById('sizes').innerHTML += `<option value="${size}">${size} EU</option>`;
     }
 
-    const materials = ["Leather", "Fabric", "Rubber", "Metallic"];
-    materials.forEach(material => {
-        document.getElementById('material-options').innerHTML += `
-            <button class="material-button">${material}</button>
-        `;
-    });
-
     document.querySelectorAll('.material-button').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.material-button').forEach(btn => {
@@ -127,26 +125,14 @@
     });
 
     document.querySelectorAll('.color-circle').forEach(circle => {
-        circle.addEventListener('click', function(event) {
-            document.querySelectorAll('.color-label').forEach(label => label.remove());
+        circle.addEventListener('click', function() {
             document.querySelectorAll('.color-circle').forEach(c => {
                 c.style.border = '2px solid #0d0d0d';
             });
-            this.style.border = '2px solid #3ff815';
-            let colorName = this.style.backgroundColor;
-            colorName = colorName.charAt(0).toUpperCase() + colorName.slice(1); // Capitalize first letter
-            let colorLabel = document.querySelector('.color-label');
-            if (!colorLabel) {
-                colorLabel = document.createElement('div');
-                colorLabel.classList.add('color-label');
-            }
-            colorLabel.textContent = colorName;
-            document.querySelector('.color').appendChild(colorLabel);
-            colorLabel.textContent = colorName;
-            event.stopPropagation();
+            this.style.border = '2px solid #69ff47';
         });
     });
-
+    
     document.querySelectorAll('.material-button').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.color-circle').forEach(circle => {

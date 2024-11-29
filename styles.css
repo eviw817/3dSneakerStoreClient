@@ -100,6 +100,7 @@ h1, h2, h3{
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    margin-bottom: 10px;
     gap: 10px;
 }
 
@@ -113,7 +114,7 @@ h1, h2, h3{
     justify-content: center;
     border-radius: 10px;
     font-weight: bold;
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 #startButton{
@@ -147,6 +148,13 @@ h1, h2, h3{
 
 /* material options */
 
+.material{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
 .material-button{
     padding: 5px 10px;
     background-color: #0d0d0d;
@@ -160,6 +168,28 @@ h1, h2, h3{
     background-color: #69ff47;
     color: #0d0d0d;
 }
+
+/* materials
+
+[data-material="Leather"]{
+    background-image: url('/materials/leather.png');
+    display: none;
+}
+
+[data-material="Fabric"]{
+    background-image: url('/materials/fabric.png');
+    display: none;
+}
+
+[data-material="Metallic"]{
+    background-image: url('/materials/metallic.png');
+    display: none;
+}
+
+[data-material="Rubber"]{
+    background-image: url('/materials/rubber.png');
+    display: none;
+} 
 
 /* color options */
 
