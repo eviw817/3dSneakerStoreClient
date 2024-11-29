@@ -6,9 +6,11 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 export function createShoeScene(el) {
+    // canvas dimensions
     const canvasHeight = 440;
     const canvasWidth = 1460;
     
+    // scene, camera and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight, 0.1, 1000 );
     
@@ -62,6 +64,8 @@ export function createShoeScene(el) {
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load('textures/image_0.png');
     
+    const spinGroup = new THREE.Group(); // create a group to hold the shoe and text
+
     // load shoe model
     const gltfLoader = new GLTFLoader();
     gltfLoader.load('/model/shoemodel.glb', (gltf) => {
@@ -81,24 +85,8 @@ export function createShoeScene(el) {
         gltf.scene.castShadow = true; // shoe shadow
     
         scene.add(gltf.scene);
-    
-        // gsap spin the shoe in a consistent loop
-        const spinAnimation = gsap.to(gltf.scene.rotation, {
-            y: Math.PI * 2,
-            duration: 5,
-            repeat: -1,
-            ease: 'none',
-        });
 
-        // Stop spinning when stopButton is clicked
-        document.getElementById('stopButton').addEventListener('click', () => {
-            spinAnimation.pause();
-        });
-
-        // Start spinning when startButton is clicked
-        document.getElementById('startButton').addEventListener('click', () => {
-            spinAnimation.resume();
-        });
+        spinGroup.add(gltf.scene); // add the shoe to the group
     });
 
     // Raycaster and interaction
@@ -130,7 +118,7 @@ export function createShoeScene(el) {
                 currentIntersect = firstIntersect;
                 const material = currentIntersect.object.material;
                 if (material && material.color) {
-                    material.color.set(0x808080); // grey color
+                    material.color.set(0x808080); 
                 }
             }
         }
@@ -149,7 +137,10 @@ export function createShoeScene(el) {
             }
         });
     });
+
+    // materials
     
+    // Add text to the scene
     const loader = new FontLoader();
 
     loader.load('fonts/RobotoMedium_Regular.json', function (font) {
@@ -160,6 +151,10 @@ export function createShoeScene(el) {
 
             if (textMesh) {
                 scene.remove(textMesh);
+                spinGroup.remove(textMesh);
+                textMesh.geometry.dispose();
+                textMesh.material.dispose();
+                textMesh = null;
             }
 
             if (shoeNameInput !== '') {
@@ -186,10 +181,32 @@ export function createShoeScene(el) {
                 textMesh.scale.set(-1, 1, 1);
 
                 scene.add(textMesh);
+
+                spinGroup.add(textMesh); // add the text to the group
             }
         });
     });
 
+    scene.add(spinGroup); // add the group to the scene
+
+    // gsap spin the group in a consistent loop
+    const spinAnimation = gsap.to(spinGroup.rotation, {
+        y: Math.PI * 2,
+        duration: 5,
+        repeat: -1,
+        ease: 'none',
+    });
+
+    // Stop spinning when stopButton is clicked
+    document.getElementById('stopButton').addEventListener('click', () => {
+        spinAnimation.pause();
+    });
+
+    // Start spinning when startButton is clicked
+    document.getElementById('startButton').addEventListener('click', () => {
+        spinAnimation.resume();
+    });
+    
     //make name spin and stop
 
     camera.position.z = 5;

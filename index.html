@@ -139,19 +139,30 @@
             if (!colorLabel) {
                 colorLabel = document.createElement('div');
                 colorLabel.classList.add('color-label');
-                colorLabel.style.textAlign = 'center';
-                colorLabel.style.position = 'absolute';
-                colorLabel.style.zIndex = '10';
-                colorLabel.style.fontWeight = 'bold';
-                colorLabel.style.backgroundColor = '#3ff815';
-                colorLabel.style.padding = '5px';
-                colorLabel.style.borderRadius = '5px';
-                colorLabel.style.marginTop = '60px';
             }
             colorLabel.textContent = colorName;
             document.querySelector('.color').appendChild(colorLabel);
             colorLabel.textContent = colorName;
             event.stopPropagation();
+        });
+    });
+
+    document.querySelectorAll('.material-button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.color-circle').forEach(circle => {
+                circle.style.border = '2px solid #0d0d0d';
+            });
+            document.querySelectorAll('.color-label').forEach(label => label.remove());
+        });
+    });
+
+    document.querySelectorAll('.color-circle').forEach(circle => {
+        circle.addEventListener('click', function() {
+            document.querySelectorAll('.material-button').forEach(button => {
+                button.classList.remove('active');
+                button.style.backgroundColor = '';
+                button.style.color = '';
+            });
         });
     });
 
