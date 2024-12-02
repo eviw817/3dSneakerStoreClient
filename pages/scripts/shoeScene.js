@@ -101,11 +101,64 @@ export function createShoeScene(el) {
                 currentIntersect = firstIntersect;
                 const material = currentIntersect.object.material;
                 if (material && material.color && material.color.getHex() === 0xffffff) {
-                    material.color.set(0x808080); 
+                    material.color.set(0xb4ffa3); 
                 }
             }
         }
     });
+
+    const materialsGroup = new THREE.Group(); // Create a group to hold all the materials
+
+    // Change Fabric on Button Click
+    document.getElementById('fabricButton').addEventListener('click', () => {
+        const fabricTexture = textureLoader.load('/materials/fabric.png');
+        const fabricMaterial = new THREE.MeshStandardMaterial({ map: fabricTexture });
+
+        if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
+            currentIntersect.object.material = fabricMaterial;
+
+            materialsGroup.add(fabricMaterial);
+        }
+    });
+
+    // Change Leather on Button Click
+    document.getElementById('leatherButton').addEventListener('click', () => {
+        const leatherTexture = textureLoader.load('/materials/leather.png');
+        const leatherMaterial = new THREE.MeshStandardMaterial({ map: leatherTexture });
+
+        if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
+            currentIntersect.object.material = leatherMaterial;
+
+            materialsGroup.add(leatherMaterial);
+        }
+    });
+
+    // Change Metallic on Button Click
+    document.getElementById('metallicButton').addEventListener('click', () => {
+        const metallicTexture = textureLoader.load('/materials/metallic.png');
+        const metallicMaterial = new THREE.MeshStandardMaterial({ map: metallicTexture });
+
+        if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
+            currentIntersect.object.material = metallicMaterial;
+
+            materialsGroup.add(metallicMaterial);
+        }
+    });
+
+    // change rubber on button click
+    document.getElementById('rubberButton').addEventListener('click', () => {
+        const rubberTexture = textureLoader.load('/materials/rubber.png');
+        const rubberMaterial = new THREE.MeshStandardMaterial({ map: rubberTexture });
+
+        if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
+            currentIntersect.object.material = rubberMaterial;
+
+            materialsGroup.add(rubberMaterial);
+        }
+    });
+
+    // Add the materials group to the scene
+    scene.add(materialsGroup);
 
     // Change Color on Button Click
     document.querySelectorAll('.color-circle').forEach((color) => {
@@ -120,20 +173,6 @@ export function createShoeScene(el) {
             }
         });
     });
-
-    // Change Material on Button Click
-    document.querySelectorAll('.material-button').forEach((button) => {
-        button.addEventListener('click', (event) => {
-            const materialName = event.target.getAttribute('data-material');
-            const materialTexture = textureLoader.load(`/materials/${materialName}.png`);
-            const newMaterial = new THREE.MeshMatcapMaterial({ matcap: materialTexture });
-            
-            if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
-                currentIntersect.object.material = newMaterial;
-            }
-        });
-    });
-
 
     // Add text to the scene
     const loader = new FontLoader();
@@ -184,22 +223,21 @@ export function createShoeScene(el) {
 
     scene.add(spinGroup); // add the group to the scene
 
-    // gsap spin the group in a consistent loop
     const spinAnimation = gsap.to(spinGroup.rotation, {
         y: Math.PI * 2,
         duration: 20,
         repeat: -1,
         ease: 'none',
+        paused: true, // Start the animation paused
     });
-
-    // Stop spinning when stopButton is clicked
-    document.getElementById('stopButton').addEventListener('click', () => {
-        spinAnimation.pause();
-    });
-
-    // Start spinning when startButton is clicked
-    document.getElementById('startButton').addEventListener('click', () => {
-        spinAnimation.resume();
+    
+    // Toggle spinning based on checkbox input
+    document.getElementById('switchButton').addEventListener('change', (event) => {
+        if (event.target.checked) {
+            spinAnimation.resume();
+        } else {
+            spinAnimation.pause();
+        }
     });
 
     camera.position.z = 5;
