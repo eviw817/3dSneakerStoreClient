@@ -19,35 +19,31 @@ export function createShoeScene(el) {
     renderer.setSize( canvasWidth, canvasHeight );
 
     // Set canvas background color
-    renderer.setClearColor(0xf0ffed, 1); // Set the background color to black
+    renderer.setClearColor(0xfdfdfd, 1); // Set the background color to black
+
+    // give the canvas a border radius of 10px and color #69ff47
+    renderer.domElement.style.borderRadius = '10px';
+    renderer.domElement.style.border = '2px solid #69ff47';
     
     // orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
-    
-    // ambient light
-    const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 ); // ambient light aanmaken met kleur en intensiteit
-    scene.add( ambientLight ); // ambient light toevoegen aan scene
-    
-    // sun light
-    const sunLight = new THREE.DirectionalLight( 0xffffff, 1 ); // directional light aanmaken met kleur en intensiteit
-    sunLight.position.set( 5, 5, 5 ); // directional light positie
-    sunLight.castShadow = true; // directional light shadow
-    scene.add( sunLight ); // directional light toevoegen aan scene
-    
-    // point light
-    const pointLight = new THREE.PointLight( 0xffffff, 1 ); // point light aanmaken met kleur en intensiteit
-    pointLight.position.set( 0, 2, 0 ); // point light positie
-    pointLight.castShadow = true; // point light shadow
-    scene.add( pointLight ); // point light toevoegen aan scene
-    
+
     // load texture
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('textures/image_0.png');
     
     const spinGroup = new THREE.Group(); // create a group to hold the shoe and text
+
+    const light = new THREE.DirectionalLight(0xffffff, 2); // White light with intensity 1
+    light.position.set(10, 10, 10); // Position the light
+    light.castShadow = true;
+    scene.add(light);
+
+    // Enable shadows for the renderer
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // load shoe model
     const gltfLoader = new GLTFLoader();
@@ -55,21 +51,40 @@ export function createShoeScene(el) {
         gltf.scene.traverse((child) => {
             if (child.isMesh && child.material) {
                 child.material = new THREE.MeshStandardMaterial({ 
-                    color: 0xffffff 
+                    color: 0xffffff
                 });
                 child.material.needsUpdate = true;
+                child.castShadow = true; // Enable shadow casting for the shoe
             }
         });
-    
+
         // Scale the shoe model
         gltf.scene.scale.set(10, 10, 10); // Increase the scale to make the shoe bigger
-    
-        gltf.scene.receiveShadow = true; // shoe shadow
-        gltf.scene.castShadow = true; // shoe shadow
-    
+
         scene.add(gltf.scene);
 
         spinGroup.add(gltf.scene); // add the shoe to the group
+    });
+
+    // load the Column.glb and add it to the scene under the shoe model on the y axis
+    const columnLoader = new GLTFLoader();
+    columnLoader.load('/model/Column.glb', (gltf) => {
+        gltf.scene.traverse((child) => {
+            if (child.isMesh && child.material) {
+                child.material = new THREE.MeshStandardMaterial({ 
+                    color: 0x69ff47 
+                });
+                child.material.needsUpdate = true;
+                child.receiveShadow = true; // Enable shadow receiving for the column
+            }
+        });
+
+        // Scale the column model
+        gltf.scene.scale.set(3.1, 3.1, 3.1); // Increase the scale to make the column bigger
+
+        scene.add(gltf.scene);
+        gltf.scene.position.y = -13; // position the column under the shoe model
+        gltf.scene.position.z = 0.2; // position the column under the shoe model
     });
 
     // Raycaster and interaction
