@@ -7,8 +7,8 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 export function createShoeScene(el) {
     // canvas dimensions
-    const canvasHeight = 440;
-    const canvasWidth = 1460;
+    const canvasHeight = el.clientHeight;
+    const canvasWidth = el.clientWidth;
     
     // scene, camera and renderer
     const scene = new THREE.Scene();
@@ -21,9 +21,6 @@ export function createShoeScene(el) {
     // Set canvas background color
     renderer.setClearColor(0xfdfdfd, 1); // Set the background color to black
 
-    // give the canvas a border radius of 10px and color #69ff47
-    renderer.domElement.style.borderRadius = '10px';
-    renderer.domElement.style.border = '2px solid #69ff47';
     
     // orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);

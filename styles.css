@@ -13,6 +13,15 @@ main{
     margin: 0 20px 20px 20px;
 }
 
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48;
+}
+
 /* nav css */
 
 nav{
@@ -21,15 +30,6 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.material-symbols-rounded {
-    font-family: 'Material Symbols Rounded';
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 48;
 }
 
 .logo{
@@ -69,6 +69,14 @@ img {
 .canvas{
     display: flex;
     justify-content: center;
+    cursor: pointer;
+}
+
+.sneakerCanvas{
+    border: 2px solid #69ff47;
+    border-radius: 10px;
+    width: 1280px;
+    height: 374px;
 }
 
 .title{
@@ -100,8 +108,8 @@ h1, h2, h3{
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    margin-bottom: 10px;
     gap: 10px;
+    margin-bottom: 6px;
 }
 
 .action-options{
@@ -232,28 +240,6 @@ input:checked + .slider:before {
     color: #0d0d0d;
 }
 
-/* materials
-
-[data-material="Leather"]{
-    background-image: url('/materials/leather.png');
-    display: none;
-}
-
-[data-material="Fabric"]{
-    background-image: url('/materials/fabric.png');
-    display: none;
-}
-
-[data-material="Metallic"]{
-    background-image: url('/materials/metallic.png');
-    display: none;
-}
-
-[data-material="Rubber"]{
-    background-image: url('/materials/rubber.png');
-    display: none;
-} 
-
 /* color options */
 
 .color{
@@ -340,20 +326,131 @@ input:checked + .slider:before {
     border: 2px solid #0d0d0d;
 }
 
-/* place order btn */
+/* cart */
+.filled-cart h1{
+    margin: 20px;
+    font-size: 4em;
+    font-weight: 900;
+}
 
-.place_order_btn > a{
+.big-container{
+    display: flex;
+    justify-content: space-between;
+    margin: 40px;
+}
+
+.order-container{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    border: 2px solid #0d0d0d;
+    gap: 600px;
+}
+
+.order-summary{
+    width: 200px;
+}
+
+.order-summary{
+    font-size: 1em;
+    font-weight: 400;
+}
+
+.order-summary h2{
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    overflow: visible;
+    padding-bottom: 14px;
+}
+
+.order-container-right{
+    text-align: end;
+}
+
+thead{
+    background-color: #3ff815;
+}
+
+th{
+    text-align: start;
+}
+
+.table-title{
+    background-color: #e1ffda;
+}
+
+.quantity-btn{
+    background-color: #3ff815;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#quantity{
+    width: 20px;
+    border-radius: 5px;
+    border: 1px solid #0d0d0d;
+    background-color: #fdfdfd;
+    color: #0d0d0d;
+    text-align: center;
+}
+
+.discount{
+    display: flex;
+    flex-direction: row;
+    margin-top: 12px;
+}
+
+.discount h3{
+    font-size: 1em;
+    font-weight: 400;
+    padding-right: 10px;
+}
+
+
+.subtotal, .shipping{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0px ;
+}
+
+.total{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0px;
+
+    border-top-style: solid;
+    border-top-width: 1px;
+    overflow: visible;
+    padding: 14px 0;
+}
+
+.total h3{
+    font-size: 1em;
+    font-weight: 600;
+}
+
+/* continue btn */
+
+.complete-order_btn{
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+} 
+
+.continue_btn > a{
     color: #0d0d0d;
 
     background-color: #d6d6d6;
     display: flex;
     justify-content: center;
     border-radius: 10px;
+
     font-weight: bold;
     padding: 10px 20px;
 }
 
-.place_order_btn > a:hover{
+.continue_btn > a:hover{
     background-color: #69ff47;
     color: #0d0d0d;
 }

@@ -33,18 +33,14 @@
     </nav>
 
     <main>
-
         <div class="title">
             <h1>Fancy shoe name</h1>
             <h2>Cute price tag</h2>
         </div>
-
         <div class="canvas">
-            <canvas id="sneakerCanvas" width="900" height="472"></canvas>
+            <canvas class="sneakerCanvas" width="1280" height="374"></canvas>
         </div>
-
         <div class="preferences">    
-            
             <div class="start-stop">
                 <h3>Rotate Shoe:</h3>
                 <label class="switch" id="switchButton">
@@ -52,14 +48,12 @@
                     <span class="slider round"></span>
                 </label>
             </div>
-            
             <div class="size">
                 <h3>Size:</h3>
                 <div class="size-options">
                     <select id="sizes"></select>
                 </div>
             </div>
-
             <div class="material">
                 <h3>Material:</h3>
                 <div id="material-options">
@@ -69,7 +63,6 @@
                     <a class="material-button" id="metallicButton">Metallic</a>
                 </div>
             </div>
-            
             <div class="color">
                 <h3>Color:</h3>
                 <div class="color-options">
@@ -84,18 +77,66 @@
                     <a href="#" class="color-circle" data-color="Brown" style="background-color: Brown"></a>
                 </div>
             </div>
-
             <div class="name-your-shoe">
                 <h3>Name your shoe:</h3>
                 <input type="text" id="shoeName" placeholder="Enter shoe name">
             </div>
-
-            <div class="place_order_btn">
+            <div class="continue_btn filled_cart_btn">
                 <a href="#">Place Order</a>
             </div>
         </div>
 
-        <!-- under here make "Filled cart" and hide other pages -->
+        <div class="filled-cart" style="display: none;">
+            <h1>Cart</h1>
+            <div class="big-container">
+                <div>
+                    <div class="order-container">
+                        <div>
+                            <h2>Real Arty Shoe</h2>
+                            <h3>Size: 42 EU</h3>
+                        </div>
+                        <div class="order-container-right">
+                            <h3>€75</h3>
+                            <div class="quantity">
+                                <button class="quantity-btn" id="minus">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="99">
+                                <style>
+                                    input[type=number]::-webkit-inner-spin-button, 
+                                    input[type=number]::-webkit-outer-spin-button { 
+                                        -webkit-appearance: none; 
+                                        margin: 0; 
+                                    }
+                                </style>
+                                <button class="quantity-btn" id="plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="discount">
+                        <h3>Discount</h3>
+                        <input type="text" id="discount-code" maxlength="10" pattern="[A-Za-z0-9]{10}" placeholder="Enter discount code">
+                    </div>
+                    </div>
+                <div class="order-summary">
+                    <h2>Order summary</h2>
+                    <div class="subtotal">
+                        <h3>Subtotal</h3>
+                        <h3>€75</h3>
+                    </div>
+                    <div class="shipping">
+                        <h3>Shipping</h3>
+                        <h3>€25</h3>
+                    </div>
+                    <div class="total">
+                        <h3>Total</h3>
+                        <h3>€100</h3>
+                    </div>
+                    
+                    <div class="continue_btn order-confirmation_btn complete-order_btn">
+                        <a href="#">Complete Order</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="order-confirmation" style="display: none;">
             <h1>Thanks for your order!</h1>
@@ -105,7 +146,9 @@
     </main>
 </body>
 <script src="main.js" type="module"></script>
-<script>
+<script type="module">
+    import { createShoeScene } from "./pages/scripts/shoeScene.js";
+
     // Sizes dropdown (35.5 - 50)
     for (let size = 35.5; size <= 50; size += 0.5) {
         document.getElementById('sizes').innerHTML += `<option value="${size}">${size} EU</option>`;
@@ -152,11 +195,50 @@
         });
     });
 
-    document.querySelector('.place_order_btn').addEventListener('click', function(event) {
-        console.log('Place Order button clicked');
+    document.getElementById('minus').addEventListener('click', function() {
+        let quantity = document.getElementById('quantity');
+        if (quantity.value > 1) {
+            quantity.value--;
+        }
+    });
+
+    document.getElementById('quantity').addEventListener('input', function() {
+        if (this.value > 99) {
+            this.value = 99;
+        } else if (this.value < 1) {
+            this.value = 1;
+        }
+    });
+
+    document.getElementById('plus').addEventListener('click', function() {
+        let quantity = document.getElementById('quantity');
+        if (quantity.value < 99) {
+            quantity.value++;
+        }
+    });
+
+    document.getElementById('discount-code').addEventListener('input', function() {
+        if (this.value.length > 0 && this.value.length < 10) {
+            this.style.border = '2px solid red';
+        } else {
+            this.style.border = '';
+        }
+    });
+
+    document.querySelector('.filled_cart_btn').addEventListener('click', function(event) {
         document.querySelector('.title').style.display = 'none';
         document.querySelector('.canvas').style.display = 'none';
         document.querySelector('.preferences').style.display = 'none';
+        document.querySelector('.filled-cart').style.display = 'block';
+        document.querySelector('.order-confirmation').style.display = 'none';
+        cr
+    });
+
+    document.querySelector('.order-confirmation_btn').addEventListener('click', function(event) {
+        document.querySelector('.title').style.display = 'none';
+        document.querySelector('.canvas').style.display = 'none';
+        document.querySelector('.preferences').style.display = 'none';
+        document.querySelector('.filled-cart').style.display = 'none';
         document.querySelector('.order-confirmation').style.display = 'block';
     });
 
