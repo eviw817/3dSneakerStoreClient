@@ -29,7 +29,10 @@
             <span class="material-symbols-rounded account">account_circle</span>
             <span class="material-symbols-rounded cart">shopping_cart</span>
         </div>
-
+        <div class="login-logout">
+            <a href="login.html" class="go-to-login_btn">Login</a>
+            <a href="login.html" class="logout_btn" style="display: none;">Logout</a>
+        </div>
     </nav>
 
     <main>
@@ -38,7 +41,7 @@
             <h2>Cute price tag</h2>
         </div>
         <div class="canvas">
-            <canvas class="sneakerCanvas" width="1280" height="374"></canvas>
+            <canvas class="sneakerCanvas" style="width: 1280px; height: 372px;"></canvas>
         </div>
         <div class="preferences">    
             <div class="start-stop">
@@ -81,15 +84,42 @@
                 <h3>Name your shoe:</h3>
                 <input type="text" id="shoeName" placeholder="Enter shoe name">
             </div>
-            <div class="continue_btn filled_cart_btn">
-                <a href="#">Place Order</a>
+            <a href="#" id="placeOrderBtn">Place Order</a>
+            <div id="loginPopup" class="popup" style="display: none">
+                <span class="close">&times;</span>
+                <p>Can't continue without logging in</p>
+                <a class="popup-btn" href="login.html">Login</a>
             </div>
         </div>
 
         <div class="filled-cart" style="display: none;">
             <h1>Cart</h1>
+            <div class="back-customize_btn">
+                <a href="#">Add a new shoe</a>
+            </div>
             <div class="big-container">
                 <div>
+                    <div class="order-container">
+                        <div>
+                            <h2>Real Arty Shoe</h2>
+                            <h3>Size: 42 EU</h3>
+                        </div>
+                        <div class="order-container-right">
+                            <h3>€75</h3>
+                            <div class="quantity">
+                                <button class="quantity-btn" id="minus">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="99">
+                                <style>
+                                    input[type=number]::-webkit-inner-spin-button, 
+                                    input[type=number]::-webkit-outer-spin-button { 
+                                        -webkit-appearance: none; 
+                                        margin: 0; 
+                                    }
+                                </style>
+                                <button class="quantity-btn" id="plus">+</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="order-container">
                         <div>
                             <h2>Real Arty Shoe</h2>
@@ -131,7 +161,7 @@
                         <h3>€100</h3>
                     </div>
                     
-                    <div class="continue_btn order-confirmation_btn complete-order_btn">
+                    <div class="order-confirmation_btn confirm_btn">
                         <a href="#">Complete Order</a>
                     </div>
                 </div>
@@ -149,11 +179,46 @@
 <script type="module">
     import { createShoeScene } from "./pages/scripts/shoeScene.js";
 
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+        fetch('%VITE_API_URL%/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid) {
+                document.querySelector('.go-to-login_btn').style.display = 'none';
+                document.querySelector('.logout_btn').style.display = 'block';
+            } else {
+                localStorage.removeItem('token');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            localStorage.removeItem('token');
+        });
+    }
+
+    document.querySelector('.logout_btn').addEventListener('click', function() {
+        localStorage.removeItem('token');
+        location.reload();
+    });
+    // Hide login button if user is logged in
+    if (token) {
+        document.querySelector('.go-to-login_btn').style.display = 'none';
+        document.querySelector('.logout_btn').style.display = 'block';
+    }
     // Sizes dropdown (35.5 - 50)
     for (let size = 35.5; size <= 50; size += 0.5) {
         document.getElementById('sizes').innerHTML += `<option value="${size}">${size} EU</option>`;
     }
 
+    // material buttons
     document.querySelectorAll('.material-button').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.material-button').forEach(btn => {
@@ -167,6 +232,7 @@
         });
     });
 
+    // color circles
     document.querySelectorAll('.color-circle').forEach(circle => {
         circle.addEventListener('click', function() {
             document.querySelectorAll('.color-circle').forEach(c => {
@@ -176,6 +242,7 @@
         });
     });
     
+    //either material or color is selected
     document.querySelectorAll('.material-button').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.color-circle').forEach(circle => {
@@ -185,6 +252,7 @@
         });
     });
 
+    // color is selected
     document.querySelectorAll('.color-circle').forEach(circle => {
         circle.addEventListener('click', function() {
             document.querySelectorAll('.material-button').forEach(button => {
@@ -195,6 +263,39 @@
         });
     });
 
+    // add shoe order to api
+    document.getElementById('placeOrderBtn').addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const shoeName = document.getElementById('shoeName').value;
+    const selectedColor = document.querySelector('.color-circle.selected').getAttribute('data-color');
+    const orderData = {
+        shoeName: shoeName,
+        color: selectedColor,
+        // Add other order details here
+    };
+
+    fetch('/api/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Success:', data);
+            // Handle success (e.g., show a confirmation message)
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle error
+        });
+    });
+
+    
+
+    // quantity button minus
     document.getElementById('minus').addEventListener('click', function() {
         let quantity = document.getElementById('quantity');
         if (quantity.value > 1) {
@@ -202,6 +303,7 @@
         }
     });
 
+    // quantity input limit
     document.getElementById('quantity').addEventListener('input', function() {
         if (this.value > 99) {
             this.value = 99;
@@ -210,6 +312,7 @@
         }
     });
 
+    // quantity button plus
     document.getElementById('plus').addEventListener('click', function() {
         let quantity = document.getElementById('quantity');
         if (quantity.value < 99) {
@@ -217,6 +320,7 @@
         }
     });
 
+    // discount code input
     document.getElementById('discount-code').addEventListener('input', function() {
         if (this.value.length > 0 && this.value.length < 10) {
             this.style.border = '2px solid red';
@@ -224,14 +328,44 @@
             this.style.border = '';
         }
     });
+    
+    // switching from filled cart back to home
+    document.querySelector('.back-customize_btn').addEventListener('click', function(event) {
+        document.querySelector('.title').style.display = 'flex';
+        document.querySelector('.canvas').style.display = 'flex';
+        document.querySelector('.preferences').style.display = 'flex';
+        document.querySelector('.filled-cart').style.display = 'none';
+        document.querySelector('.order-confirmation').style.display = 'none';
+    });
 
-    document.querySelector('.filled_cart_btn').addEventListener('click', function(event) {
+    document.getElementById('placeOrderBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (!token) {
+            document.getElementById('loginPopup').style.display = 'flex';
+        } else {
+            document.querySelector('.title').style.display = 'none';
+            document.querySelector('.canvas').style.display = 'none';
+            document.querySelector('.preferences').style.display = 'none';
+            document.querySelector('.filled-cart').style.display = 'block';
+            document.querySelector('.order-confirmation').style.display = 'none';
+        }
+    });
+
+    function closePopup() {
+        document.getElementById("myForm").style.display = "none";
+    }
+
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('loginPopup').style.display = 'none';
+    });
+
+    // switched from home to filled cart, from filled cart to order confirmation
+    document.querySelector('.confirm_btn').addEventListener('click', function(event) {
         document.querySelector('.title').style.display = 'none';
         document.querySelector('.canvas').style.display = 'none';
         document.querySelector('.preferences').style.display = 'none';
         document.querySelector('.filled-cart').style.display = 'block';
         document.querySelector('.order-confirmation').style.display = 'none';
-        cr
     });
 
     document.querySelector('.order-confirmation_btn').addEventListener('click', function(event) {
@@ -245,5 +379,6 @@
     document.querySelector('.home-btn').addEventListener('click', function(event) {
         location.reload();
     });
+
 </script>
 </html>

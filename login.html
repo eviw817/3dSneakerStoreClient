@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>3d Sneaker Store</title>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="/images/SWEAR_Logo.png" alt="logo">
+        </div>
+        <div class="menu">
+            <p>Shop</p>
+            <p>About</p>
+            <p>Vault</p>
+            <p>Journal</p>
+            <p>Sustainability</p>
+        </div>
+        <div class="settings">
+            <span class="material-symbols-rounded search">search</span>
+            <span class="material-symbols-rounded account">account_circle</span>
+            <span class="material-symbols-rounded cart">shopping_cart</span>
+        </div>
+    </nav>
+
+    <main>
+        <div class="login"> 
+            <h1>Log In</h1>
+            <form id="loginForm">
+                <div class="username">
+                    <label for="username">Username</label>
+                    <input type="username" id="username" name="username" required>
+                </div>
+                <div class="password">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="login-btn">
+                    <a href="index.html" id="submit">Log In</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('submit').addEventListener('click', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('%VITE_API_URL%/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (data.data.token) {
+            localStorage.setItem('token', data.token);
+            window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

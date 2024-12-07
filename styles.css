@@ -64,19 +64,92 @@ img {
     color: #fdfdfd;
 }
 
+/* login */
+
+.login-logout{
+    background-color: #cccccc;
+    margin-right: 20px;
+    padding: 4px 10px;
+}
+
+.login-logout:hover{
+    background-color: #69ff47;
+}
+
+.login-logout a{
+    color: #0d0d0d;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.login h1{
+    font-size: 4rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.username, .password{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 20px;
+    color: #757575;
+}
+
+.login input:focus {
+    border-color: #69ff47;
+}
+
+.login input{
+    border: 1px solid #69ff47;
+    outline: none;
+    background-color: transparent;
+    font-size: 1em;
+    padding: 8px 0px;
+}
+
+.login-btn{
+    margin-top: 40px;
+    font-weight: 500;
+
+    padding: 8px 34px;
+    background-color: #cccccc;
+    color: #ffffff;
+}
+
+.login-btn:hover{
+    background-color: #69ff47;
+}
+
+#submit{
+    color: #0d0d0d;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+}
+
 /* main */
 
 .canvas{
     display: flex;
     justify-content: center;
     cursor: pointer;
+    padding: 0px;
 }
 
 .sneakerCanvas{
     border: 2px solid #69ff47;
-    border-radius: 10px;
     width: 1280px;
-    height: 374px;
+    height: 372px;
 }
 
 .title{
@@ -120,7 +193,6 @@ h1, h2, h3{
 #startButton, #stopButton{
     display: flex;
     justify-content: center;
-    border-radius: 10px;
     font-weight: bold;
     padding: 5px 10px;
 }
@@ -211,7 +283,6 @@ input:checked + .slider:before {
 .size-options select, #part-options select{
     width: 100px;
     padding: 5px;
-    border-radius: 5px;
     border: 1px solid #0d0d0d;
     background-color: #fdfdfd;
     color: #0d0d0d;
@@ -230,7 +301,6 @@ input:checked + .slider:before {
     padding: 5px 10px;
     background-color: #0d0d0d;
     color: #fdfdfd;
-    border-radius: 10px;
     font-weight: bold;
     margin: 10px;
 }
@@ -264,18 +334,6 @@ input:checked + .slider:before {
     display: inline-block; 
     margin: 5px; 
     border: 2px solid #0d0d0d;
-}
-
-.color-label{
-    left: 60%;
-    transform: translateX(-50%);
-    position: absolute;
-    z-index: 10;
-    font-weight: bold;
-    background-color: #3ff815;
-    padding: 5px;
-    border-radius: 5px;
-    margin-top: 60px;
 }
 
 /* color css */
@@ -320,10 +378,75 @@ input:checked + .slider:before {
 
 #shoeName{
     width: auto;
-    border-radius: 10px; 
     margin: 5px; 
     padding: 5px 10px;
     border: 2px solid #0d0d0d;
+}
+
+/* place order button */
+#placeOrderBtn{
+    color: #0d0d0d;
+
+    background-color: #d6d6d6;
+    display: flex;
+    justify-content: center;
+
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+#placeOrderBtn:hover {
+    color: #0d0d0d;
+
+    background-color: #69ff47;
+    display: flex;
+    justify-content: center;
+
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+/* popup */
+
+#loginPopup{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fdfdfd;
+    border: 2px solid #0d0d0d;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.popup-close {
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #0d0d0d;
+}
+
+.popup a {
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #69ff47;
+    border: none;
+    color: #0d0d0d;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.popup a:hover {
+    background-color: #0d0d0d;
+    color: #fdfdfd;
 }
 
 /* cart */
@@ -345,6 +468,7 @@ input:checked + .slider:before {
     padding: 10px;
     border: 2px solid #0d0d0d;
     gap: 600px;
+    margin-bottom: 12px;
 }
 
 .order-summary{
@@ -382,13 +506,11 @@ th{
 .quantity-btn{
     background-color: #3ff815;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
 }
 
 #quantity{
     width: 20px;
-    border-radius: 5px;
     border: 1px solid #0d0d0d;
     background-color: #fdfdfd;
     color: #0d0d0d;
@@ -398,7 +520,6 @@ th{
 .discount{
     display: flex;
     flex-direction: row;
-    margin-top: 12px;
 }
 
 .discount h3{
@@ -407,11 +528,15 @@ th{
     padding-right: 10px;
 }
 
-
 .subtotal, .shipping{
     display: flex;
     justify-content: space-between;
     margin: 10px 0px ;
+}
+
+.subtotal h3, .shipping h3{
+    font-size: 1em;
+    font-weight: 500;
 }
 
 .total{
@@ -427,30 +552,49 @@ th{
 
 .total h3{
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 800;
 }
 
-/* continue btn */
+/* back to customization */
 
-.complete-order_btn{
+.back-customize_btn{
     position: absolute;
     right: 40px;
-    bottom: 40px;
-} 
+    top: 100px;
+}
 
-.continue_btn > a{
+.back-customize_btn a{
+    text-decoration: none;
     color: #0d0d0d;
 
-    background-color: #d6d6d6;
+    background-color: #69ff47;
     display: flex;
     justify-content: center;
-    border-radius: 10px;
 
     font-weight: bold;
     padding: 10px 20px;
 }
 
-.continue_btn > a:hover{
+/* continue btn */
+
+.order-confirmation_btn{
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+}
+
+.confirm_btn > a{
+    color: #0d0d0d;
+
+    background-color: #d6d6d6;
+    display: flex;
+    justify-content: center;
+
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.confirm_btn > a:hover{
     background-color: #69ff47;
     color: #0d0d0d;
 }
@@ -470,7 +614,6 @@ th{
     color: #0d0d0d;
 
     background-color: #69ff47;
-    border-radius: 10px;
     font-weight: bold;
     margin: 20px;
     padding: 10px 20px;
