@@ -1,5 +1,4 @@
 import { getRandomAdjectives } from "./generators";
-import { getPartColor, getPartMaterial } from "./shoeScene";
 
 export function handleLogout() {
     localStorage.removeItem('token');
