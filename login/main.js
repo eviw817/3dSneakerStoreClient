@@ -17,6 +17,6 @@ document.getElementById('submit').addEventListener('click', async function(event
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('username', data.data.user.username);
         localStorage.setItem('id', data.data.user._id);
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
     }
 });
