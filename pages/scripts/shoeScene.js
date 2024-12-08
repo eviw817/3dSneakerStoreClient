@@ -176,7 +176,6 @@ export function createShoeScene(el) {
     document.querySelectorAll('.color-circle').forEach((color) => {
         color.addEventListener('click', (event) => {
             const colorValue = event.target.getAttribute('data-color');
-            console.log(`Color picked: ${colorValue}`);
             if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
                 const material = currentIntersect.object.material;
                 if (material && material.color) {

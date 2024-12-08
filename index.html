@@ -181,38 +181,17 @@
 
     // Check if user is logged in
     const token = localStorage.getItem('token');
-    if (token) {
-        fetch('%VITE_API_URL%/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.valid) {
-                document.querySelector('.go-to-login_btn').style.display = 'none';
-                document.querySelector('.logout_btn').style.display = 'block';
-            } else {
-                localStorage.removeItem('token');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            localStorage.removeItem('token');
-        });
-    }
-
     document.querySelector('.logout_btn').addEventListener('click', function() {
         localStorage.removeItem('token');
         location.reload();
-    });
+    })
+
     // Hide login button if user is logged in
     if (token) {
         document.querySelector('.go-to-login_btn').style.display = 'none';
         document.querySelector('.logout_btn').style.display = 'block';
     }
+
     // Sizes dropdown (35.5 - 50)
     for (let size = 35.5; size <= 50; size += 0.5) {
         document.getElementById('sizes').innerHTML += `<option value="${size}">${size} EU</option>`;
@@ -263,38 +242,6 @@
         });
     });
 
-    // add shoe order to api
-    document.getElementById('placeOrderBtn').addEventListener('click', (event) => {
-    event.preventDefault();
-
-    const shoeName = document.getElementById('shoeName').value;
-    const selectedColor = document.querySelector('.color-circle.selected').getAttribute('data-color');
-    const orderData = {
-        shoeName: shoeName,
-        color: selectedColor,
-        // Add other order details here
-    };
-
-    fetch('/api/order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-    })
-        .then(response => response.text())
-        .then(data => {
-            console.log('Success:', data);
-            // Handle success (e.g., show a confirmation message)
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            // Handle error
-        });
-    });
-
-    
-
     // quantity button minus
     document.getElementById('minus').addEventListener('click', function() {
         let quantity = document.getElementById('quantity');
@@ -338,18 +285,19 @@
         document.querySelector('.order-confirmation').style.display = 'none';
     });
 
-    document.getElementById('placeOrderBtn').addEventListener('click', function(event) {
-        event.preventDefault();
-        if (!token) {
-            document.getElementById('loginPopup').style.display = 'flex';
-        } else {
-            document.querySelector('.title').style.display = 'none';
-            document.querySelector('.canvas').style.display = 'none';
-            document.querySelector('.preferences').style.display = 'none';
-            document.querySelector('.filled-cart').style.display = 'block';
-            document.querySelector('.order-confirmation').style.display = 'none';
-        }
-    });
+    // document.getElementById('placeOrderBtn').addEventListener('click', function(event) {
+    //     console.log(token)
+    //     event.preventDefault();
+    //     if (!token) {
+    //         document.getElementById('loginPopup').style.display = 'flex';
+    //     } else {
+    //         document.querySelector('.title').style.display = 'none';
+    //         document.querySelector('.canvas').style.display = 'none';
+    //         document.querySelector('.preferences').style.display = 'none';
+    //         document.querySelector('.filled-cart').style.display = 'block';
+    //         document.querySelector('.order-confirmation').style.display = 'none';
+    //     }
+    // });
 
     function closePopup() {
         document.getElementById("myForm").style.display = "none";
@@ -359,14 +307,14 @@
         document.getElementById('loginPopup').style.display = 'none';
     });
 
-    // switched from home to filled cart, from filled cart to order confirmation
-    document.querySelector('.confirm_btn').addEventListener('click', function(event) {
-        document.querySelector('.title').style.display = 'none';
-        document.querySelector('.canvas').style.display = 'none';
-        document.querySelector('.preferences').style.display = 'none';
-        document.querySelector('.filled-cart').style.display = 'block';
-        document.querySelector('.order-confirmation').style.display = 'none';
-    });
+    // // switched from home to filled cart, from filled cart to order confirmation
+    // document.querySelector('.confirm_btn').addEventListener('click', function(event) {
+    //     document.querySelector('.title').style.display = 'none';
+    //     document.querySelector('.canvas').style.display = 'none';
+    //     document.querySelector('.preferences').style.display = 'none';
+    //     document.querySelector('.filled-cart').style.display = 'block';
+    //     document.querySelector('.order-confirmation').style.display = 'none';
+    // });
 
     document.querySelector('.order-confirmation_btn').addEventListener('click', function(event) {
         document.querySelector('.title').style.display = 'none';
@@ -378,6 +326,34 @@
 
     document.querySelector('.home-btn').addEventListener('click', function(event) {
         location.reload();
+    });
+
+    // post order to api
+    document.getElementById('placeOrderBtn').addEventListener('click', function(event) {
+        const orderData = {
+            shoeName: document.getElementById('shoeName').value ? document.getElementById('shoeName').value : null,
+            color: document.querySelector('.color-circle.selected') ? document.querySelector('.color-circle.selected').getAttribute('data-color') : null,
+            size: document.getElementById('sizes').value,
+            material: document.querySelector('.material-button.active') ? document.querySelector('.material-button.active').textContent : null,
+        };
+
+        fetch('%VITE_API_URL%/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(orderData),
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Success:', orderData.data);
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Handle error
+            });
     });
 
 </script>
