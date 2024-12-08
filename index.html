@@ -38,7 +38,10 @@
     <main>
         <div class="title">
             <h1>Placeholder name</h1>
-            <h2>Cute price tag</h2>
+            <div class="top-right-corner">
+                <h2>Cute price tag</h2>
+                <a href="#" id="continueToCartBtn">Continue to Cart</a>
+            </div>
         </div>
         <div class="canvas">
             <canvas class="sneakerCanvas" style="width: 1280px; height: 372px;"></canvas>
@@ -99,53 +102,14 @@
             </div>
             <div class="big-container">
                 <div>
-                    <div class="order-container">
-                        <div>
-                            <h2>Real Arty Shoe</h2>
-                            <h3>Size: 42 EU</h3>
-                        </div>
-                        <div class="order-container-right">
-                            <h3>€75</h3>
-                            <div class="quantity">
-                                <button class="quantity-btn" id="minus">-</button>
-                                <input type="number" id="quantity" value="1" min="1" max="99">
-                                <style>
-                                    input[type=number]::-webkit-inner-spin-button, 
-                                    input[type=number]::-webkit-outer-spin-button { 
-                                        -webkit-appearance: none; 
-                                        margin: 0; 
-                                    }
-                                </style>
-                                <button class="quantity-btn" id="plus">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-container">
-                        <div>
-                            <h2>Real Arty Shoe</h2>
-                            <h3>Size: 42 EU</h3>
-                        </div>
-                        <div class="order-container-right">
-                            <h3>€75</h3>
-                            <div class="quantity">
-                                <button class="quantity-btn" id="minus">-</button>
-                                <input type="number" id="quantity" value="1" min="1" max="99">
-                                <style>
-                                    input[type=number]::-webkit-inner-spin-button, 
-                                    input[type=number]::-webkit-outer-spin-button { 
-                                        -webkit-appearance: none; 
-                                        margin: 0; 
-                                    }
-                                </style>
-                                <button class="quantity-btn" id="plus">+</button>
-                            </div>
-                        </div>
+                    <div id="orders">
+                    
                     </div>
                     <div class="discount">
                         <h3>Discount</h3>
                         <input type="text" id="discount-code" maxlength="10" pattern="[A-Za-z0-9]{10}" placeholder="Enter discount code">
                     </div>
-                    </div>
+                </div>
                 <div class="order-summary">
                     <h2>Order summary</h2>
                     <div class="subtotal">
@@ -177,17 +141,16 @@
 </body>
 <script src="main.js" type="module"></script>
 <script type="module">
-    import { createShoeScene, getPartColor, getPartMaterial } from "./pages/scripts/shoeScene.js";
+    import { getRandomAdjectives, calculatePrice } from "./scripts/generators.js";
+    import { createShoeScene, getPartColor, getPartMaterial } from "./scripts/shoeScene.js";
+    import { handleLogout, showCart, fetchPendingOrders, addPendingOrder, completeOrder, generateCart } from "./scripts/eventListeners.js";
 
     // Check if user is logged in
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     const id = localStorage.getItem('id');
 
-    document.querySelector('.logout_btn').addEventListener('click', function() {
-        localStorage.removeItem('token');
-        location.reload();
-    })
+    document.querySelector('.logout_btn').addEventListener('click', handleLogout);
 
     // Hide login button if user is logged in
     if (token) {
@@ -195,30 +158,7 @@
         document.querySelector('.logout_btn').style.display = 'block';
     }
 
-    // Random Shoe Title
-    const adjectives = [
-        "Amazing", "Awesome", "Beautiful", "Brilliant", "Charming", "Cool", "Dazzling", "Elegant", "Excellent", "Fabulous",
-        "Fantastic", "Gorgeous", "Graceful", "Impressive", "Incredible", "Lovely", "Magnificent", "Marvelous", "Outstanding", "Perfect",
-        "Phenomenal", "Remarkable", "Sensational", "Spectacular", "Splendid", "Stunning", "Superb", "Terrific", "Wonderful", "Wondrous",
-        "Radiant", "Vibrant", "Stylish", "Trendy", "Unique", "Vivid", "Classy", "Dapper", "Posh", "Snazzy"
-    ];
-
-    function getRandomAdjectives() {
-        const shuffled = adjectives.sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, 2).join(' ') + ' Shoe';
-    }
-
     document.querySelector('.title h1').textContent = getRandomAdjectives();
-
-    // Calculate price
-    function calculatePrice() {
-        let basePrice = 50;
-        let materialPrice = document.querySelector('.material-button.active') ? 15 : 0;
-        let colorPrice = document.querySelector('.color-circle[style*="border: 2px solid rgb(105, 255, 71);"]') ? 10 : 0;
-        let namePrice = document.getElementById('shoeName').value ? 20 : 0;
-        let totalPrice = basePrice + materialPrice + colorPrice + namePrice;
-        document.querySelector('.title h2').textContent = `€${totalPrice}`;
-    }
 
     // Add event listeners to update price
     document.querySelectorAll('.material-button').forEach(button => {
@@ -283,40 +223,6 @@
             });
         });
     });
-
-    // quantity button minus
-    document.getElementById('minus').addEventListener('click', function() {
-        let quantity = document.getElementById('quantity');
-        if (quantity.value > 1) {
-            quantity.value--;
-        }
-    });
-
-    // quantity input limit
-    document.getElementById('quantity').addEventListener('input', function() {
-        if (this.value > 99) {
-            this.value = 99;
-        } else if (this.value < 1) {
-            this.value = 1;
-        }
-    });
-
-    // quantity button plus
-    document.getElementById('plus').addEventListener('click', function() {
-        let quantity = document.getElementById('quantity');
-        if (quantity.value < 99) {
-            quantity.value++;
-        }
-    });
-
-    // discount code input
-    document.getElementById('discount-code').addEventListener('input', function() {
-        if (this.value.length > 0 && this.value.length < 10) {
-            this.style.border = '2px solid red';
-        } else {
-            this.style.border = '';
-        }
-    });
     
     // switching from filled cart back to home
     document.querySelector('.back-customize_btn').addEventListener('click', function(event) {
@@ -327,19 +233,17 @@
         document.querySelector('.order-confirmation').style.display = 'none';
     });
 
-    // document.getElementById('placeOrderBtn').addEventListener('click', function(event) {
-    //     console.log(token)
-    //     event.preventDefault();
-    //     if (!token) {
-    //         document.getElementById('loginPopup').style.display = 'flex';
-    //     } else {
-    //         document.querySelector('.title').style.display = 'none';
-    //         document.querySelector('.canvas').style.display = 'none';
-    //         document.querySelector('.preferences').style.display = 'none';
-    //         document.querySelector('.filled-cart').style.display = 'block';
-    //         document.querySelector('.order-confirmation').style.display = 'none';
-    //     }
-    // });
+    document.getElementById('continueToCartBtn').addEventListener('click', async function(event) {
+        const pendingOrders = await fetchPendingOrders();
+        generateCart(pendingOrders);
+        showCart(event);
+    });
+
+    document.getElementById('placeOrderBtn').addEventListener('click', async function(event) {
+        const orders = await Promise.all([fetchPendingOrders(), addPendingOrder()]);
+        generateCart(orders.flat());
+        showCart(event);
+    });
 
     function closePopup() {
         document.getElementById("myForm").style.display = "none";
@@ -349,85 +253,21 @@
         document.getElementById('loginPopup').style.display = 'none';
     });
 
-    // // switched from home to filled cart, from filled cart to order confirmation
-    // document.querySelector('.confirm_btn').addEventListener('click', function(event) {
-    //     document.querySelector('.title').style.display = 'none';
-    //     document.querySelector('.canvas').style.display = 'none';
-    //     document.querySelector('.preferences').style.display = 'none';
-    //     document.querySelector('.filled-cart').style.display = 'block';
-    //     document.querySelector('.order-confirmation').style.display = 'none';
-    // });
-
-    document.querySelector('.order-confirmation_btn').addEventListener('click', function(event) {
+    // switched from home to filled cart, from filled cart to order confirmation
+    document.querySelector('.confirm_btn').addEventListener('click', function(event) {
         document.querySelector('.title').style.display = 'none';
         document.querySelector('.canvas').style.display = 'none';
         document.querySelector('.preferences').style.display = 'none';
-        document.querySelector('.filled-cart').style.display = 'none';
-        document.querySelector('.order-confirmation').style.display = 'block';
+        document.querySelector('.filled-cart').style.display = 'block';
+        document.querySelector('.order-confirmation').style.display = 'none';
+    });
+
+    document.querySelector('.order-confirmation_btn').addEventListener('click', function(event) {
+        completeOrder();
     });
 
     document.querySelector('.home-btn').addEventListener('click', function(event) {
         location.reload();
-    });
-
-    // post order to api
-    document.getElementById('placeOrderBtn').addEventListener('click', function(event) {
-        const orderData = {
-        title: getRandomAdjectives(),
-        price: Number(document.querySelector('.title h2').textContent.replace('€', '')),
-        deliveryStatus: 'Pending',
-        paymentStatus: false,
-        timeOfOrder: new Date().toISOString(),
-        parts: {
-            outside_1: {
-                color: getPartColor('outside_1'),
-                material: getPartMaterial('outside_1')
-            },
-            outside_2: {
-                color: getPartColor('outside_2'),
-                material: getPartMaterial('outside_2')
-            },
-            outside_3: {
-                color: getPartColor('outside_3'),
-                material: getPartMaterial('outside_3')
-            },
-            sole_bottom: {
-                color: getPartColor('sole_bottom'),
-                material: getPartMaterial('sole_bottom')
-            },
-            sole_top: {
-                color: getPartColor('sole_top'),
-                material: getPartMaterial('sole_top')
-            },
-            inside: {
-                color: getPartColor('inside'),
-                material: getPartMaterial('inside')
-            },
-            laces: {
-                color: getPartColor('laces'),
-                material: getPartMaterial('laces')
-            }
-        },
-        name: document.getElementById('shoeName').value,
-        quantity: 1,
-        userId: id
-        };
-
-        fetch('%VITE_API_URL%/orders', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(orderData),
-        })
-            .then(response => response.text())
-            .then(data => {
-                console.log('Success:', orderData.data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
     });
 
 </script>
