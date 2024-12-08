@@ -5,6 +5,28 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'; // importeert g
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
+const editableObjects = [
+    "outside_1",
+    "outside_2",
+    "outside_3",
+    "sole_bottom",
+    "sole_top",
+    "inside",
+    "laces"
+];
+let currentIntersect = null;
+
+const partColors = {};
+const partMaterials = {};
+
+export function getPartColor(partName) {
+    return partColors[partName] || 0xffffff;
+}
+
+export function getPartMaterial(partName) {
+    return partMaterials[partName] || null;
+}
+
 export function createShoeScene(el) {
     // canvas dimensions
     const canvasHeight = el.clientHeight;
@@ -87,16 +109,6 @@ export function createShoeScene(el) {
     // Raycaster and interaction
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    const editableObjects = [
-        "outside_1",
-        "outside_2",
-        "outside_3",
-        "sole_bottom",
-        "sole_top",
-        "inside",
-        "laces"
-    ];
-    let currentIntersect = null;
 
     // Handle mouse click events
     window.addEventListener('click', (event) => {
@@ -114,6 +126,7 @@ export function createShoeScene(el) {
                 const material = currentIntersect.object.material;
                 if (material && material.color && material.color.getHex() === 0xffffff) {
                     material.color.set(0xb4ffa3); 
+                    partColors[currentIntersect.object.name] = material.color.getHex();
                 }
             }
         }
@@ -128,6 +141,7 @@ export function createShoeScene(el) {
 
         if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
             currentIntersect.object.material = fabricMaterial;
+            partMaterials[currentIntersect.object.name] = "fabric"; // Store "fabric" as string
 
             materialsGroup.add(fabricMaterial);
         }
@@ -140,6 +154,7 @@ export function createShoeScene(el) {
 
         if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
             currentIntersect.object.material = leatherMaterial;
+            partMaterials[currentIntersect.object.name] = "leather"; // Store "leather" as string
 
             materialsGroup.add(leatherMaterial);
         }
@@ -152,6 +167,7 @@ export function createShoeScene(el) {
 
         if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
             currentIntersect.object.material = metallicMaterial;
+            partMaterials[currentIntersect.object.name] = "metallic"; // Store "metallic" as string
 
             materialsGroup.add(metallicMaterial);
         }
@@ -164,6 +180,7 @@ export function createShoeScene(el) {
 
         if (currentIntersect && editableObjects.includes(currentIntersect.object.name)) {
             currentIntersect.object.material = rubberMaterial;
+            partMaterials[currentIntersect.object.name] = "rubber"; // Store "rubber" as string
 
             materialsGroup.add(rubberMaterial);
         }
@@ -180,6 +197,7 @@ export function createShoeScene(el) {
                 const material = currentIntersect.object.material;
                 if (material && material.color) {
                     material.color.set(colorValue);
+                    partColors[currentIntersect.object.name] = material.color.getHex();
                 }
             }
         });
