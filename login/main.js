@@ -3,7 +3,7 @@ document.getElementById('submit').addEventListener('click', async function(event
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('%VITE_API_URL%/users/login', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
