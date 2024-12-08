@@ -240,7 +240,38 @@
     });
 
     document.getElementById('placeOrderBtn').addEventListener('click', async function(event) {
-        const orders = await Promise.all([fetchPendingOrders(), addPendingOrder()]);
+        const composition = {
+            outside_1: {
+                color: getPartColor('outside_1'),
+                material: getPartMaterial('outside_1')
+            },
+            outside_2: {
+                color: getPartColor('outside_2'),
+                material: getPartMaterial('outside_2')
+            },
+            outside_3: {
+                color: getPartColor('outside_3'),
+                material: getPartMaterial('outside_3')
+            },
+            sole_bottom: {
+                color: getPartColor('sole_bottom'),
+                material: getPartMaterial('sole_bottom')
+            },
+            sole_top: {
+                color: getPartColor('sole_top'),
+                material: getPartMaterial('sole_top')
+            },
+            inside: {
+                color: getPartColor('inside'),
+                material: getPartMaterial('inside')
+            },
+            laces: {
+                color: getPartColor('laces'),
+                material: getPartMaterial('laces')
+            }
+        }
+        console.log(composition);
+        const orders = await Promise.all([fetchPendingOrders(), addPendingOrder(composition)]);
         generateCart(orders.flat());
         showCart(event);
     });

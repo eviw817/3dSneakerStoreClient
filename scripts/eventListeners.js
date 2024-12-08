@@ -60,7 +60,7 @@ export function showCart(event) {
     }
 }
 
-export async function addPendingOrder() {
+export async function addPendingOrder(composition) {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('id');
     const orderData = {
@@ -69,36 +69,7 @@ export async function addPendingOrder() {
         deliveryStatus: 'Pending',
         paymentStatus: false,
         timeOfOrder: new Date().toISOString(),
-        parts: {
-            outside_1: {
-                color: getPartColor('outside_1'),
-                material: getPartMaterial('outside_1')
-            },
-            outside_2: {
-                color: getPartColor('outside_2'),
-                material: getPartMaterial('outside_2')
-            },
-            outside_3: {
-                color: getPartColor('outside_3'),
-                material: getPartMaterial('outside_3')
-            },
-            sole_bottom: {
-                color: getPartColor('sole_bottom'),
-                material: getPartMaterial('sole_bottom')
-            },
-            sole_top: {
-                color: getPartColor('sole_top'),
-                material: getPartMaterial('sole_top')
-            },
-            inside: {
-                color: getPartColor('inside'),
-                material: getPartMaterial('inside')
-            },
-            laces: {
-                color: getPartColor('laces'),
-                material: getPartMaterial('laces')
-            }
-        },
+        parts: composition,
         name: document.getElementById('shoeName').value,
         size: document.getElementById('sizes').value,
         quantity: 1,

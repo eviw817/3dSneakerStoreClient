@@ -55,7 +55,7 @@ export function createShoeScene(el) {
     
     const spinGroup = new THREE.Group(); // create a group to hold the shoe and text
 
-    const light = new THREE.DirectionalLight(0xffffff, 2); // White light with intensity 1
+    const light = new THREE.DirectionalLight(0xffffff, 3); // White light with intensity 1
     light.position.set(10, 10, 10); // Position the light
     light.castShadow = true;
     scene.add(light);
